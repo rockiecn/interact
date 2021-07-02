@@ -14,7 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/rpc"
 
-	"github.com/wy/interact/storage"
+	"github.com/rockiecn/interact/storage"
 )
 
 //
