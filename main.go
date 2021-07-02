@@ -17,12 +17,16 @@ import (
 	"github.com/rockiecn/interact/storage"
 )
 
+const (
+	HOST = "http://119.147.213.220:8191"
+)
+
 //
 func main() {
 
 	var cmd string
 
-	fmt.Println("intput cmd, 1 to retrieve data, 2 to store data.")
+	fmt.Println("intput cmd, 1 to retrieve data, 2 to store data, 3 to deploy contract")
 	fmt.Scanf("%s",&cmd)
 
 	switch cmd {
@@ -49,7 +53,8 @@ func main() {
 func CallRetrieve() error {
     //cli, err := ethclient.Dial("http://localhost:8545")
 	//cli, err := ethclient.Dial("../myGeth/data/geth.ipc")
-    cli ,err := getClient("http://localhost:8545")
+	fmt.Println("HOST: ",HOST)
+	cli ,err := getClient(HOST)
 	if err != nil {
 			fmt.Println("failed to dial geth", err)
 			return err
@@ -77,7 +82,8 @@ func CallRetrieve() error {
 
 //
 func CallStore(n *big.Int) error {
-	cli ,err := getClient("http://localhost:8545")
+	fmt.Println("HOST: ",HOST)
+	cli ,err := getClient(HOST)
 	if err != nil {
 			fmt.Println("failed to dial geth", err)
 			return err
@@ -126,9 +132,8 @@ func CallStore(n *big.Int) error {
 func CallDeploy() (common.Address, error) {
 	var storageAddr common.Address
 
-    //cli, err := ethclient.Dial("http://192.168.105.141:8545")
-
-	cli, err := getClient("https://127.0.0.1:8545")
+	fmt.Println("HOST: ",HOST)
+	cli ,err := getClient(HOST)
 	if err != nil {
 			fmt.Println("failed to dial geth", err)
 			return storageAddr, err
