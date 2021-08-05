@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"math/big"
-	"net/rpc"
 	"strings"
 	"time"
 
@@ -15,13 +14,14 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/rpc"
 )
 
 const HOST = "http://localhost:8545"
 
 //
 func GetClient(endPoint string) (*ethclient.Client, error) {
-	rpcClient, err := rpc.Dial("tcp", endPoint)
+	rpcClient, err := rpc.Dial(endPoint)
 	if err != nil {
 		log.Println("rpc.Dial err:", err)
 		return nil, err
@@ -52,7 +52,7 @@ func MakeAuth(hexSk string, moneyToContract, nonce, gasPrice *big.Int, gasLimit 
 func QueryBalance(account string) (*big.Int, error) {
 	var result string
 
-	client, err := rpc.Dial("tpc", HOST)
+	client, err := rpc.Dial(HOST)
 	if err != nil {
 		log.Println("rpc.dial err:", err)
 		return big.NewInt(0), err

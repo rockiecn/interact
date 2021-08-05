@@ -19,7 +19,8 @@ const (
 	HOST = "http://localhost:8545"
 )
 
-//
+// to do: pick contract address as param,
+// and call.go is irrelavent to specific contract address
 func CallRetrieve() error {
 	fmt.Println("HOST: ", HOST)
 	cli, err := clientops.GetClient(HOST)
@@ -30,7 +31,7 @@ func CallRetrieve() error {
 	defer cli.Close()
 
 	//
-	storageInstance, err := storage.NewStorage(common.HexToAddress("0x942601c2520ab92a32E417BE30402387be6AfC4D"), cli)
+	storageInstance, err := storage.NewStorage(common.HexToAddress("0x52D898a941C0b3d12C19b45008c210965644c7D5"), cli)
 	if err != nil {
 		fmt.Println("NewStorage err: ", err)
 	} else {
@@ -51,7 +52,7 @@ func CallRetrieve() error {
 //
 func CallStore(n *big.Int) error {
 	fmt.Println("HOST: ", HOST)
-	cli, err := clientops.GetClient("tcp", HOST)
+	cli, err := clientops.GetClient(HOST)
 	if err != nil {
 		fmt.Println("failed to dial geth", err)
 		return err
@@ -81,7 +82,7 @@ func CallStore(n *big.Int) error {
 	}
 
 	//
-	storageInstance, err := storage.NewStorage(common.HexToAddress("0x942601c2520ab92a32E417BE30402387be6AfC4D"), cli)
+	storageInstance, err := storage.NewStorage(common.HexToAddress("0x52D898a941C0b3d12C19b45008c210965644c7D5"), cli)
 	if err != nil {
 		fmt.Println("NewStorage err: ", err)
 		return err
@@ -108,7 +109,7 @@ func CallDeploy() (common.Address, error) {
 	var storageAddr common.Address
 
 	fmt.Println("HOST: ", HOST)
-	client, err := clientops.GetClient("tcp", HOST)
+	client, err := clientops.GetClient(HOST)
 	//client, err := ethclient.Dial(HOST)
 	if err != nil {
 		fmt.Println("failed to dial geth", err)
