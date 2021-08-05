@@ -16,14 +16,13 @@ import (
 )
 
 const (
-	HOST    = "http://localhost:8545"
-	NETWORK = "1337"
+	HOST = "http://localhost:8545"
 )
 
 //
 func CallRetrieve() error {
 	fmt.Println("HOST: ", HOST)
-	cli, err := clientops.GetClient(NETWORK, HOST)
+	cli, err := clientops.GetClient(HOST)
 	if err != nil {
 		fmt.Println("failed to dial geth", err)
 		return err
@@ -52,7 +51,7 @@ func CallRetrieve() error {
 //
 func CallStore(n *big.Int) error {
 	fmt.Println("HOST: ", HOST)
-	cli, err := clientops.GetClient(NETWORK, HOST)
+	cli, err := clientops.GetClient("tcp", HOST)
 	if err != nil {
 		fmt.Println("failed to dial geth", err)
 		return err
@@ -109,7 +108,7 @@ func CallDeploy() (common.Address, error) {
 	var storageAddr common.Address
 
 	fmt.Println("HOST: ", HOST)
-	client, err := clientops.GetClient(NETWORK, HOST)
+	client, err := clientops.GetClient("tcp", HOST)
 	//client, err := ethclient.Dial(HOST)
 	if err != nil {
 		fmt.Println("failed to dial geth", err)

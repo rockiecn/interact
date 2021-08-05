@@ -15,14 +15,13 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/rockiecn/interact/callstorage"
 )
 
-const NETWORK = "1337"
+const HOST = "http://localhost:8545"
 
 //
-func GetClient(network string, endPoint string) (*ethclient.Client, error) {
-	rpcClient, err := rpc.Dial(network, endPoint)
+func GetClient(endPoint string) (*ethclient.Client, error) {
+	rpcClient, err := rpc.Dial("tcp", endPoint)
 	if err != nil {
 		log.Println("rpc.Dial err:", err)
 		return nil, err
@@ -53,7 +52,7 @@ func MakeAuth(hexSk string, moneyToContract, nonce, gasPrice *big.Int, gasLimit 
 func QueryBalance(account string) (*big.Int, error) {
 	var result string
 
-	client, err := rpc.Dial(callstorage.NETWORK, callstorage.HOST)
+	client, err := rpc.Dial("tpc", HOST)
 	if err != nil {
 		log.Println("rpc.dial err:", err)
 		return big.NewInt(0), err
@@ -93,6 +92,7 @@ func QueryBalance(account string) (*big.Int, error) {
 
 //
 func TransferTo(value *big.Int, toAddr, eth string) error {
+
 	client, err := ethclient.Dial(eth)
 	if err != nil {
 		fmt.Println("rpc.Dial err", err)
@@ -121,6 +121,7 @@ func TransferTo(value *big.Int, toAddr, eth string) error {
 	toAddress := common.HexToAddress(toAddr[2:])
 	log.Println("toAddress: ", toAddress)
 
+	var chainID *big.Int
 	networkID, err := client.NetworkID(context.Background())
 	if err != nil {
 		fmt.Println("client.NetworkID error,use the default chainID")
@@ -188,6 +189,6 @@ func TransferTo(value *big.Int, toAddr, eth string) error {
 		time.Sleep(time.Duration(t) * time.Second)
 	*/
 
-	log.Println("transfer ", value.String(), "wei to", addr, "complete")
+	log.Println("transfer ", value.String(), "wei to", toAddr, "complete")
 	return nil
 }
