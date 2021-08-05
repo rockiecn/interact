@@ -1,4 +1,4 @@
-package callstorage
+package callcontract
 
 import (
 	"context"

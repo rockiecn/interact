@@ -8,7 +8,7 @@ import (
 
 	//"github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/rockiecn/interact/callstorage"
+	"github.com/rockiecn/interact/callcontact"
 )
 
 var (
@@ -39,7 +39,7 @@ func main() {
 
 	switch cmd {
 	case "1":
-		callstorage.CallRetrieve()
+		callcontact.CallRetrieve()
 
 	case "2":
 		fmt.Println("input data:")
@@ -48,18 +48,18 @@ func main() {
 		fmt.Scanf("%d", &idata)
 		fmt.Printf("your input: %d\n", idata)
 		data := big.NewInt(idata)
-		callstorage.CallStore(data)
+		callcontact.CallStore(data)
 
 	case "3":
 		fmt.Println("deploying")
-		callstorage.CallDeploy()
+		callcontact.CallDeploy()
 
 	case "4":
 		fmt.Println("query balance of account0")
-		callstorage.CallQuery()
+		callcontact.CallQuery()
 
 	case "5":
 		fmt.Println("transfer value")
-		callstorage.CallTransferTo()
+		callcontact.CallTransferTo()
 	}
 }
