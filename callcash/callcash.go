@@ -18,7 +18,7 @@ import (
 const HOST = "http://localhost:8545"
 
 //
-func CallApplyCheque(n *big.Int) error {
+func CallApplyCheque() error {
 	fmt.Println("HOST: ", HOST)
 	cli, err := clientops.GetClient(HOST)
 	if err != nil {
@@ -43,7 +43,7 @@ func CallApplyCheque(n *big.Int) error {
 	}
 
 	//
-	fmt.Printf("n = %s\n", n.String())
+	//fmt.Printf("n = %s\n", n.String())
 
 	// address to receive money
 	toAddress := common.HexToAddress("0xb213d01542d129806d664248a380db8b12059061")
