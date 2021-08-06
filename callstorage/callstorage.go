@@ -1,4 +1,4 @@
-package callcontract
+package callstorage
 
 import (
 	"context"
@@ -15,9 +15,7 @@ import (
 	"github.com/rockiecn/interact/storage"
 )
 
-const (
-	HOST = "http://localhost:8545"
-)
+const HOST = "http://localhost:8545"
 
 // to do: pick contract address as param,
 // and call.go is irrelavent to specific contract address
