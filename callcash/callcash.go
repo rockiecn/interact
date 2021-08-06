@@ -34,12 +34,12 @@ func CallApplyCheque() error {
 	}
 
 	//
-	cashInstance, err := cash.NewCash(common.HexToAddress("0x52D898a941C0b3d12C19b45008c210965644c7D5"), cli)
+	cashInstance, err := cash.NewCash(common.HexToAddress("0x77AA1d64C1E85Cc4AF38046FfF5bc35e394f8eAD"), cli)
 	if err != nil {
-		fmt.Println("NewStorage err: ", err)
+		fmt.Println("NewCash err: ", err)
 		return err
 	} else {
-		fmt.Println("NewStorage success: ", cashInstance)
+		fmt.Println("NewCash success: ", cashInstance)
 	}
 
 	//
@@ -124,7 +124,7 @@ func CallDeploy() (common.Address, error) {
 		log.Println("deployCashErr:", err)
 		return cashAddr, err
 	}
-	log.Println("storageAddr:", cashAddr.String())
+	log.Println("cashAddr:", cashAddr.String())
 	return cashAddr, nil
 
 }
