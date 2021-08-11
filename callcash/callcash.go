@@ -18,7 +18,7 @@ import (
 const HOST = "http://localhost:8545"
 
 //
-func CallApplyCheque() error {
+func CallApplyCheque(storageAddr []byte, nonce []byte, payAmount []byte, sig []byte) error {
 	fmt.Println("HOST: ", HOST)
 	cli, err := clientops.GetClient(HOST)
 	if err != nil {

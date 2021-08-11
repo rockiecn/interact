@@ -164,25 +164,6 @@ func CallDeploy() (common.Address, error) {
 	log.Println("storageAddr:", storageAddr.String())
 	return storageAddr, nil
 
-	/*
-		storeAddr, tx, ins, err := store.DeployStore(auth, client, "1.0")
-		if err != nil {
-			log.Println("deployStoreErr:", err)
-			log.Println("storeAddr:", storeAddr)
-			log.Println("tx:", tx)
-			return storeAddr, err
-		} else {
-			log.Println("tx:", tx)
-			log.Println("ins:", ins)
-
-		}
-		txCID := tx.ChainId()
-		log.Println("txCID:", txCID)
-
-		log.Println("storeAddr:", storeAddr.String())
-		return storeAddr, nil
-	*/
-
 }
 
 //QueryBalance(account string)
