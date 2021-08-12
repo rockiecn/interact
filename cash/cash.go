@@ -27,10 +27,15 @@ var (
 )
 
 // CashABI is the input ABI used to generate the binding from.
-const CashABI = "[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oldOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnerSet\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"addresspayable\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"apply_cheque\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}]"
+const CashABI = "[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"show\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddr\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"stAddr\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"payAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"sign\",\"type\":\"bytes\"}],\"name\":\"apply_cheque\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"}]"
+
+// CashFuncSigs maps the 4-byte function signature to its string representation.
+var CashFuncSigs = map[string]string{
+	"163dbf98": "apply_cheque(address,uint256,address,uint256,bytes)",
+}
 
 // CashBin is the compiled bytecode used for deploying new contracts.
-var CashBin = "0x6080604052336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555060008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16600073ffffffffffffffffffffffffffffffffffffffff167f342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a73560405160405180910390a3610199806100ce6000396000f3fe60806040526004361061001e5760003560e01c8063b37aafaf14610023575b600080fd5b61003d600480360381019061003891906100b4565b61003f565b005b8173ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f19350505050158015610085573d6000803e3d6000fd5b505050565b60008135905061009981610135565b92915050565b6000813590506100ae8161014c565b92915050565b600080604083850312156100cb576100ca610130565b5b60006100d98582860161008a565b92505060206100ea8582860161009f565b9150509250929050565b60006100ff82610106565b9050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6000819050919050565b600080fd5b61013e816100f4565b811461014957600080fd5b50565b61015581610126565b811461016057600080fd5b5056fea2646970667358221220d48a7cbda7b47b6b92bc4df926f0c9e50653abccf09ea81a89d624ff8fca010764736f6c63430008060033"
+var CashBin = "0x608060405261039e806100136000396000f3fe60806040526004361061001e5760003560e01c8063163dbf9814610023575b600080fd5b610036610031366004610239565b61004a565b604051901515815260200160405180910390f35b6040516bffffffffffffffffffffffff19606087811b821660208401526034830187905285901b16605482015260688101839052600090819060880160405160208183030381529060405280519060200120905060006100aa8285610118565b9050806001600160a01b0316886001600160a01b03161415610108576040516001600160a01b0387169086156108fc029087906000818181858888f193505050501580156100fc573d6000803e3d6000fd5b5060019250505061010f565b6000925050505b95945050505050565b6000815160411461012b57506000610217565b60208201516040830151606084015160001a7f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a08211156101715760009350505050610217565b601b8160ff16101561018b5761018881601b61031f565b90505b8060ff16601b141580156101a357508060ff16601c14155b156101b45760009350505050610217565b60408051600081526020810180835288905260ff831691810191909152606081018490526080810183905260019060a0016020604051602081039080840390855afa158015610207573d6000803e3d6000fd5b5050506020604051035193505050505b92915050565b80356001600160a01b038116811461023457600080fd5b919050565b600080600080600060a0868803121561025157600080fd5b61025a8661021d565b94506020860135935061026f6040870161021d565b925060608601359150608086013567ffffffffffffffff8082111561029357600080fd5b818801915088601f8301126102a757600080fd5b8135818111156102b9576102b9610352565b604051601f8201601f19908116603f011681019083821181831017156102e1576102e1610352565b816040528281528b60208487010111156102fa57600080fd5b8260208601602083013760006020848301015280955050505050509295509295909350565b600060ff821660ff84168060ff0382111561034a57634e487b7160e01b600052601160045260246000fd5b019392505050565b634e487b7160e01b600052604160045260246000fdfea2646970667358221220243a7492e5c4338e0bd0f863f8df32837d72a78c9d9c5a025cf11582403ea08864736f6c63430008070033"
 
 // DeployCash deploys a new Ethereum contract, binding an instance of Cash to it.
 func DeployCash(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *Cash, error) {
@@ -188,30 +193,30 @@ func (_Cash *CashTransactorRaw) Transact(opts *bind.TransactOpts, method string,
 	return _Cash.Contract.contract.Transact(opts, method, params...)
 }
 
-// ApplyCheque is a paid mutator transaction binding the contract method 0xb37aafaf.
+// ApplyCheque is a paid mutator transaction binding the contract method 0x163dbf98.
 //
-// Solidity: function apply_cheque(address to, uint256 amount) payable returns()
-func (_Cash *CashTransactor) ApplyCheque(opts *bind.TransactOpts, to common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Cash.contract.Transact(opts, "apply_cheque", to, amount)
+// Solidity: function apply_cheque(address userAddr, uint256 nonce, address stAddr, uint256 payAmount, bytes sign) payable returns(bool)
+func (_Cash *CashTransactor) ApplyCheque(opts *bind.TransactOpts, userAddr common.Address, nonce *big.Int, stAddr common.Address, payAmount *big.Int, sign []byte) (*types.Transaction, error) {
+	return _Cash.contract.Transact(opts, "apply_cheque", userAddr, nonce, stAddr, payAmount, sign)
 }
 
-// ApplyCheque is a paid mutator transaction binding the contract method 0xb37aafaf.
+// ApplyCheque is a paid mutator transaction binding the contract method 0x163dbf98.
 //
-// Solidity: function apply_cheque(address to, uint256 amount) payable returns()
-func (_Cash *CashSession) ApplyCheque(to common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Cash.Contract.ApplyCheque(&_Cash.TransactOpts, to, amount)
+// Solidity: function apply_cheque(address userAddr, uint256 nonce, address stAddr, uint256 payAmount, bytes sign) payable returns(bool)
+func (_Cash *CashSession) ApplyCheque(userAddr common.Address, nonce *big.Int, stAddr common.Address, payAmount *big.Int, sign []byte) (*types.Transaction, error) {
+	return _Cash.Contract.ApplyCheque(&_Cash.TransactOpts, userAddr, nonce, stAddr, payAmount, sign)
 }
 
-// ApplyCheque is a paid mutator transaction binding the contract method 0xb37aafaf.
+// ApplyCheque is a paid mutator transaction binding the contract method 0x163dbf98.
 //
-// Solidity: function apply_cheque(address to, uint256 amount) payable returns()
-func (_Cash *CashTransactorSession) ApplyCheque(to common.Address, amount *big.Int) (*types.Transaction, error) {
-	return _Cash.Contract.ApplyCheque(&_Cash.TransactOpts, to, amount)
+// Solidity: function apply_cheque(address userAddr, uint256 nonce, address stAddr, uint256 payAmount, bytes sign) payable returns(bool)
+func (_Cash *CashTransactorSession) ApplyCheque(userAddr common.Address, nonce *big.Int, stAddr common.Address, payAmount *big.Int, sign []byte) (*types.Transaction, error) {
+	return _Cash.Contract.ApplyCheque(&_Cash.TransactOpts, userAddr, nonce, stAddr, payAmount, sign)
 }
 
-// CashOwnerSetIterator is returned from FilterOwnerSet and is used to iterate over the raw logs and unpacked data for OwnerSet events raised by the Cash contract.
-type CashOwnerSetIterator struct {
-	Event *CashOwnerSet // Event containing the contract specifics and raw log
+// CashShowIterator is returned from FilterShow and is used to iterate over the raw logs and unpacked data for Show events raised by the Cash contract.
+type CashShowIterator struct {
+	Event *CashShow // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -225,7 +230,7 @@ type CashOwnerSetIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *CashOwnerSetIterator) Next() bool {
+func (it *CashShowIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -234,7 +239,7 @@ func (it *CashOwnerSetIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(CashOwnerSet)
+			it.Event = new(CashShow)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -249,7 +254,7 @@ func (it *CashOwnerSetIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(CashOwnerSet)
+		it.Event = new(CashShow)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -265,60 +270,41 @@ func (it *CashOwnerSetIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *CashOwnerSetIterator) Error() error {
+func (it *CashShowIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *CashOwnerSetIterator) Close() error {
+func (it *CashShowIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// CashOwnerSet represents a OwnerSet event raised by the Cash contract.
-type CashOwnerSet struct {
-	OldOwner common.Address
-	NewOwner common.Address
-	Raw      types.Log // Blockchain specific contextual infos
+// CashShow represents a Show event raised by the Cash contract.
+type CashShow struct {
+	Arg0 []byte
+	Raw  types.Log // Blockchain specific contextual infos
 }
 
-// FilterOwnerSet is a free log retrieval operation binding the contract event 0x342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a735.
+// FilterShow is a free log retrieval operation binding the contract event 0xfb687b8805689fd7d97b0f174d316f660a67e3dc6bfb412c484bef58f01f18e6.
 //
-// Solidity: event OwnerSet(address indexed oldOwner, address indexed newOwner)
-func (_Cash *CashFilterer) FilterOwnerSet(opts *bind.FilterOpts, oldOwner []common.Address, newOwner []common.Address) (*CashOwnerSetIterator, error) {
+// Solidity: event show(bytes arg0)
+func (_Cash *CashFilterer) FilterShow(opts *bind.FilterOpts) (*CashShowIterator, error) {
 
-	var oldOwnerRule []interface{}
-	for _, oldOwnerItem := range oldOwner {
-		oldOwnerRule = append(oldOwnerRule, oldOwnerItem)
-	}
-	var newOwnerRule []interface{}
-	for _, newOwnerItem := range newOwner {
-		newOwnerRule = append(newOwnerRule, newOwnerItem)
-	}
-
-	logs, sub, err := _Cash.contract.FilterLogs(opts, "OwnerSet", oldOwnerRule, newOwnerRule)
+	logs, sub, err := _Cash.contract.FilterLogs(opts, "show")
 	if err != nil {
 		return nil, err
 	}
-	return &CashOwnerSetIterator{contract: _Cash.contract, event: "OwnerSet", logs: logs, sub: sub}, nil
+	return &CashShowIterator{contract: _Cash.contract, event: "show", logs: logs, sub: sub}, nil
 }
 
-// WatchOwnerSet is a free log subscription operation binding the contract event 0x342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a735.
+// WatchShow is a free log subscription operation binding the contract event 0xfb687b8805689fd7d97b0f174d316f660a67e3dc6bfb412c484bef58f01f18e6.
 //
-// Solidity: event OwnerSet(address indexed oldOwner, address indexed newOwner)
-func (_Cash *CashFilterer) WatchOwnerSet(opts *bind.WatchOpts, sink chan<- *CashOwnerSet, oldOwner []common.Address, newOwner []common.Address) (event.Subscription, error) {
+// Solidity: event show(bytes arg0)
+func (_Cash *CashFilterer) WatchShow(opts *bind.WatchOpts, sink chan<- *CashShow) (event.Subscription, error) {
 
-	var oldOwnerRule []interface{}
-	for _, oldOwnerItem := range oldOwner {
-		oldOwnerRule = append(oldOwnerRule, oldOwnerItem)
-	}
-	var newOwnerRule []interface{}
-	for _, newOwnerItem := range newOwner {
-		newOwnerRule = append(newOwnerRule, newOwnerItem)
-	}
-
-	logs, sub, err := _Cash.contract.WatchLogs(opts, "OwnerSet", oldOwnerRule, newOwnerRule)
+	logs, sub, err := _Cash.contract.WatchLogs(opts, "show")
 	if err != nil {
 		return nil, err
 	}
@@ -328,8 +314,8 @@ func (_Cash *CashFilterer) WatchOwnerSet(opts *bind.WatchOpts, sink chan<- *Cash
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(CashOwnerSet)
-				if err := _Cash.contract.UnpackLog(event, "OwnerSet", log); err != nil {
+				event := new(CashShow)
+				if err := _Cash.contract.UnpackLog(event, "show", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -350,14 +336,176 @@ func (_Cash *CashFilterer) WatchOwnerSet(opts *bind.WatchOpts, sink chan<- *Cash
 	}), nil
 }
 
-// ParseOwnerSet is a log parse operation binding the contract event 0x342827c97908e5e2f71151c08502a66d44b6f758e3ac2f1de95f02eb95f0a735.
+// ParseShow is a log parse operation binding the contract event 0xfb687b8805689fd7d97b0f174d316f660a67e3dc6bfb412c484bef58f01f18e6.
 //
-// Solidity: event OwnerSet(address indexed oldOwner, address indexed newOwner)
-func (_Cash *CashFilterer) ParseOwnerSet(log types.Log) (*CashOwnerSet, error) {
-	event := new(CashOwnerSet)
-	if err := _Cash.contract.UnpackLog(event, "OwnerSet", log); err != nil {
+// Solidity: event show(bytes arg0)
+func (_Cash *CashFilterer) ParseShow(log types.Log) (*CashShow, error) {
+	event := new(CashShow)
+	if err := _Cash.contract.UnpackLog(event, "show", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
 	return event, nil
+}
+
+// RecoverABI is the input ABI used to generate the binding from.
+const RecoverABI = "[]"
+
+// RecoverBin is the compiled bytecode used for deploying new contracts.
+var RecoverBin = "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122008c2e92f83a37e13d63ea20a5f4d22e5ace01e54733a6573342e2c4ef4c4ebfa64736f6c63430008070033"
+
+// DeployRecover deploys a new Ethereum contract, binding an instance of Recover to it.
+func DeployRecover(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *Recover, error) {
+	parsed, err := abi.JSON(strings.NewReader(RecoverABI))
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+
+	address, tx, contract, err := bind.DeployContract(auth, parsed, common.FromHex(RecoverBin), backend)
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+	return address, tx, &Recover{RecoverCaller: RecoverCaller{contract: contract}, RecoverTransactor: RecoverTransactor{contract: contract}, RecoverFilterer: RecoverFilterer{contract: contract}}, nil
+}
+
+// Recover is an auto generated Go binding around an Ethereum contract.
+type Recover struct {
+	RecoverCaller     // Read-only binding to the contract
+	RecoverTransactor // Write-only binding to the contract
+	RecoverFilterer   // Log filterer for contract events
+}
+
+// RecoverCaller is an auto generated read-only Go binding around an Ethereum contract.
+type RecoverCaller struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// RecoverTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type RecoverTransactor struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// RecoverFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type RecoverFilterer struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// RecoverSession is an auto generated Go binding around an Ethereum contract,
+// with pre-set call and transact options.
+type RecoverSession struct {
+	Contract     *Recover          // Generic contract binding to set the session for
+	CallOpts     bind.CallOpts     // Call options to use throughout this session
+	TransactOpts bind.TransactOpts // Transaction auth options to use throughout this session
+}
+
+// RecoverCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// with pre-set call options.
+type RecoverCallerSession struct {
+	Contract *RecoverCaller // Generic contract caller binding to set the session for
+	CallOpts bind.CallOpts  // Call options to use throughout this session
+}
+
+// RecoverTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// with pre-set transact options.
+type RecoverTransactorSession struct {
+	Contract     *RecoverTransactor // Generic contract transactor binding to set the session for
+	TransactOpts bind.TransactOpts  // Transaction auth options to use throughout this session
+}
+
+// RecoverRaw is an auto generated low-level Go binding around an Ethereum contract.
+type RecoverRaw struct {
+	Contract *Recover // Generic contract binding to access the raw methods on
+}
+
+// RecoverCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type RecoverCallerRaw struct {
+	Contract *RecoverCaller // Generic read-only contract binding to access the raw methods on
+}
+
+// RecoverTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type RecoverTransactorRaw struct {
+	Contract *RecoverTransactor // Generic write-only contract binding to access the raw methods on
+}
+
+// NewRecover creates a new instance of Recover, bound to a specific deployed contract.
+func NewRecover(address common.Address, backend bind.ContractBackend) (*Recover, error) {
+	contract, err := bindRecover(address, backend, backend, backend)
+	if err != nil {
+		return nil, err
+	}
+	return &Recover{RecoverCaller: RecoverCaller{contract: contract}, RecoverTransactor: RecoverTransactor{contract: contract}, RecoverFilterer: RecoverFilterer{contract: contract}}, nil
+}
+
+// NewRecoverCaller creates a new read-only instance of Recover, bound to a specific deployed contract.
+func NewRecoverCaller(address common.Address, caller bind.ContractCaller) (*RecoverCaller, error) {
+	contract, err := bindRecover(address, caller, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &RecoverCaller{contract: contract}, nil
+}
+
+// NewRecoverTransactor creates a new write-only instance of Recover, bound to a specific deployed contract.
+func NewRecoverTransactor(address common.Address, transactor bind.ContractTransactor) (*RecoverTransactor, error) {
+	contract, err := bindRecover(address, nil, transactor, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &RecoverTransactor{contract: contract}, nil
+}
+
+// NewRecoverFilterer creates a new log filterer instance of Recover, bound to a specific deployed contract.
+func NewRecoverFilterer(address common.Address, filterer bind.ContractFilterer) (*RecoverFilterer, error) {
+	contract, err := bindRecover(address, nil, nil, filterer)
+	if err != nil {
+		return nil, err
+	}
+	return &RecoverFilterer{contract: contract}, nil
+}
+
+// bindRecover binds a generic wrapper to an already deployed contract.
+func bindRecover(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := abi.JSON(strings.NewReader(RecoverABI))
+	if err != nil {
+		return nil, err
+	}
+	return bind.NewBoundContract(address, parsed, caller, transactor, filterer), nil
+}
+
+// Call invokes the (constant) contract method with params as input values and
+// sets the output to result. The result type might be a single field for simple
+// returns, a slice of interfaces for anonymous returns and a struct for named
+// returns.
+func (_Recover *RecoverRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _Recover.Contract.RecoverCaller.contract.Call(opts, result, method, params...)
+}
+
+// Transfer initiates a plain transaction to move funds to the contract, calling
+// its default method if one is available.
+func (_Recover *RecoverRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Recover.Contract.RecoverTransactor.contract.Transfer(opts)
+}
+
+// Transact invokes the (paid) contract method with params as input values.
+func (_Recover *RecoverRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _Recover.Contract.RecoverTransactor.contract.Transact(opts, method, params...)
+}
+
+// Call invokes the (constant) contract method with params as input values and
+// sets the output to result. The result type might be a single field for simple
+// returns, a slice of interfaces for anonymous returns and a struct for named
+// returns.
+func (_Recover *RecoverCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _Recover.Contract.contract.Call(opts, result, method, params...)
+}
+
+// Transfer initiates a plain transaction to move funds to the contract, calling
+// its default method if one is available.
+func (_Recover *RecoverTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Recover.Contract.contract.Transfer(opts)
+}
+
+// Transact invokes the (paid) contract method with params as input values.
+func (_Recover *RecoverTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _Recover.Contract.contract.Transact(opts, method, params...)
 }

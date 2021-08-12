@@ -15,10 +15,22 @@ import (
 	"github.com/rockiecn/interact/clientops"
 )
 
+// host
 const HOST = "http://localhost:8545"
 
+// ApplyCheque(opts *bind.TransactOpts,
+// 	userAddr common.Address,
+// 	nonce *big.Int,
+// 	stAddr common.Address,
+// 	payAmount *big.Int,
+// 	sign []byte)
 //
-func CallApplyCheque(storageAddr []byte, nonce []byte, payAmount []byte, sig []byte) error {
+func CallApplyCheque(
+	userAddr common.Address,
+	nonce *big.Int,
+	stAddr common.Address,
+	payAmount *big.Int,
+	sig []byte) error {
 	fmt.Println("HOST: ", HOST)
 	cli, err := clientops.GetClient(HOST)
 	if err != nil {
@@ -27,13 +39,14 @@ func CallApplyCheque(storageAddr []byte, nonce []byte, payAmount []byte, sig []b
 	}
 	defer cli.Close()
 
+	// operator's sk
 	hexSk := "cb61e1519b560d994e4361b34c181656d916beb68513cff06c37eb7d258bf93d"
 	auth, err := clientops.MakeAuth(hexSk, nil, nil, big.NewInt(1000), 3000000)
 	if err != nil {
 		return err
 	}
 
-	//
+	// need cash address
 	cashInstance, err := cash.NewCash(common.HexToAddress("0x77AA1d64C1E85Cc4AF38046FfF5bc35e394f8eAD"), cli)
 	if err != nil {
 		fmt.Println("NewCash err: ", err)
@@ -46,9 +59,10 @@ func CallApplyCheque(storageAddr []byte, nonce []byte, payAmount []byte, sig []b
 	//fmt.Printf("n = %s\n", n.String())
 
 	// address to receive money
-	toAddress := common.HexToAddress("0xb213d01542d129806d664248a380db8b12059061")
-	// transfer 1 eth to receiver
-	tx, err := cashInstance.ApplyCheque(auth, toAddress, big.NewInt(1000000000000000000))
+	// toAddress := common.HexToAddress("0xb213d01542d129806d664248a380db8b12059061")
+
+	// call apply cheque
+	tx, err := cashInstance.ApplyCheque(auth, userAddr, nonce, stAddr, payAmount, sig)
 	if err != nil {
 		fmt.Println("tx failed :", err)
 		return err
